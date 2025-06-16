@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "led_matrix.h"
 #include "joystick_input.h"
+#include "pong_logik.h"
 
 // Joystick-LED-Positionen
 int led1X = 0, led1Y = 0;
@@ -30,16 +31,15 @@ void loop() {
 
   // Matrix aktualisieren
   clearMatrix();
+  setPixel(ballX, ballY, CRGB::White);
 
   // Steuerbare LEDs setzen
   setPixel(led1X, led1Y, CHSV((RGB_COLOR * 20) % 255, 255, 255));
   setPixel(led2X, led2Y, CHSV((RGB_COLOR * 20 + 120) % 255, 255, 255));
 
-  // Autonome LED (läuft durch die Matrix)
-  setPixel(autoIndex % WIDTH, autoIndex / WIDTH, CHSV(160, 255, 255));
-  autoIndex = (autoIndex + 1) % NUM_LEDS;
 
   showMatrix();
   RGB_COLOR++;
   delay(100);
+  updateBall();
 }

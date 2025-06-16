@@ -1,2 +1,2 @@
 #pragma once
-void handleJoystick(int xVal, int yVal, int &xPos, int &yPos);
+void handleJoystick(int yVal, int &yPos);

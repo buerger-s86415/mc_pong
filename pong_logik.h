@@ -11,3 +11,4 @@ extern int heldByPlayer;
 void updateBall();
 void drawPaddles();
 void resetBall(int richtung);
+void checkWin();

@@ -1,5 +1,6 @@
 #include "pong_logik.h"
 #include "led_matrix.h"
+#include "lcd_display.h"
 
 // Ball def
 int ballX = WIDTH / 2;
@@ -17,6 +18,7 @@ int paddleY2 = HEIGHT / 2 - PADDLE_HEIGHT / 2;
 
 void updateBall() {
   if (ballHeld) return;
+
   // Ballposition updaten
   ballX += ballVX;
   ballY += ballVY;
@@ -48,6 +50,10 @@ void updateBall() {
   // Tor für Spieler 2
   if (ballX < 0) {
     score2++;
+    showMessage("Tor Spieler 2!");
+    delay(1000);
+    showScore(score1, score2);
+    checkWin();
     resetBall(-1);
     return;
   }
@@ -55,6 +61,10 @@ void updateBall() {
   // Tor für Spieler 1
   if (ballX > WIDTH - 1) {
     score1++;
+    showMessage("Tor Spieler 1!");
+    delay(1000);
+    showScore(score1, score2);
+    checkWin();
     resetBall(1);
     return;
   }
@@ -85,4 +95,15 @@ void resetBall(int richtung) {
 
   ballVX = 0;
   ballVY = 0;
+}
+
+void checkWin() {
+  if (score1 >= 10) {
+    showMessage("1 gewinnt!");
+    while (true);  // Spiel einfrieren
+  }
+  if (score2 >= 10) {
+    showMessage("2 gewinnt!");
+    while (true);  // Spiel einfrieren
+  }
 }

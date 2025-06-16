@@ -4,6 +4,7 @@
 #include "led_matrix.h"
 #include "joystick_input.h"
 #include "lcd_display.h"
+#include "sound.h"
 
 // Joystick-LED-Positionen
 int led1X = 0, led1Y = 0;
@@ -16,6 +17,7 @@ void setup() {
   showMatrix();
   initLCD();
   showScore(score1, score2);
+  pinMode(BUZZER_PIN, OUTPUT);
 
   ballHeld = true;
   heldByPlayer = 1;
@@ -24,6 +26,7 @@ void setup() {
   ballY = paddleY1 + PADDLE_HEIGHT / 2;
   ballVX = 0;
   ballVY = 0;
+  playStartSound();
 }
 
 void loop() {

@@ -1,9 +1,10 @@
 #include "led_matrix.h"
-
+#include "joystick_input.h"
 CRGB leds[NUM_LEDS];
 
 void initMatrix() {
   FastLED.addLeds<WS2812B, DATA_PIN, GRB>(leds, NUM_LEDS);
+  FastLED.setBrightness(30);
   FastLED.clear();
   FastLED.show();
 }

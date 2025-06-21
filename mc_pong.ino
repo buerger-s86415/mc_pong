@@ -6,6 +6,8 @@
 #include "lcd_display.h"
 #include "sound.h"
 
+#include <FastLED.h>
+
 // Joystick-LED-Positionen
 int led1X = 0, led1Y = 0;
 int led2X = WIDTH - 1, led2Y = HEIGHT - 1;
@@ -18,6 +20,8 @@ void setup() {
   initLCD();
   showScore(score1, score2);
   pinMode(BUZZER_PIN, OUTPUT);
+  pinMode(12, INPUT_PULLUP);
+  pinMode(3, INPUT_PULLUP);
 
   ballHeld = true;
   heldByPlayer = 1;
@@ -33,8 +37,10 @@ void loop() {
   // Joysticks lesen
   int x1 = analogRead(A4);
   int y1 = analogRead(A5);
+  int b1 = digitalRead(12);
   int x2 = analogRead(A0);
   int y2 = analogRead(A1);
+  int b2 = digitalRead(3);
 
   if (ballHeld) {
     if (heldByPlayer == 1) {
@@ -72,8 +78,10 @@ void loop() {
   clearMatrix();
   updateBall();
   setPixel(ballX, ballY, CRGB::White);
+  CRGB colorp1 = updatePlayerColor1(b1);
+  CRGB colorp2 = updatePlayerColor2(b2);
 
-  drawPaddles();;
+  drawPaddles(colorp1, colorp2);
   showMatrix();
   delay(100);
 }

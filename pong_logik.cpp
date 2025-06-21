@@ -2,6 +2,8 @@
 #include "led_matrix.h"
 #include "lcd_display.h"
 #include "sound.h"
+#include <FastLED.h>
+
 
 // Ball def
 int ballX = WIDTH / 2;
@@ -16,6 +18,18 @@ bool ballHeld = false;
 // Paddle Positionen
 int paddleY1 = HEIGHT / 2 - PADDLE_HEIGHT /2;
 int paddleY2 = HEIGHT / 2 - PADDLE_HEIGHT / 2;
+
+const CRGB colors[8] = {
+  CRGB::Red,
+  CRGB::Green,
+  CRGB::Blue,
+  CRGB::Yellow,
+  CRGB::Orange,
+  CRGB::Purple,
+  CRGB::Cyan,
+  CRGB::White
+};
+
 
 void updateBall() {
   if (ballHeld) return;
@@ -79,13 +93,13 @@ void updateBall() {
   if (ballVX == 0) ballVX = (random(0, 2) * 2 - 1);
 }
 
-void drawPaddles() {
+void drawPaddles(CRGB colorp1, CRGB colorp2) {
   for (int i = 0; i < PADDLE_HEIGHT; i++) {
     if (paddleY1 + i < HEIGHT) {
-      setPixel(0, paddleY1 + i, CRGB::Blue);
+      setPixel(0, paddleY1 + i, colorp1);
     }
     if (paddleY2 + i < HEIGHT) {
-      setPixel(WIDTH - 1, paddleY2 + i, CRGB::Red);
+      setPixel(WIDTH - 1, paddleY2 + i, CRGB(colorp2));
     }
   }
 }
@@ -113,4 +127,36 @@ void checkWin() {
     playEndSound();
     while (true);
   }
+}
+
+CRGB updatePlayerColor1(int b1) {
+  static bool lastState = LOW;
+  static uint8_t colorIndex = 0;
+
+  if (b1 == HIGH && lastState == LOW) {
+    playWallSound();
+    colorIndex++;
+    if (colorIndex >= 8) {
+      colorIndex = 0;
+    }
+  }
+  lastState = b1;
+
+  return colors[colorIndex];
+}
+
+CRGB updatePlayerColor2(int b2) {
+  static bool lastState = LOW;
+  static uint8_t colorIndex = 0;
+
+  if (b2 == HIGH && lastState == LOW) {
+    playWallSound();
+    colorIndex++;
+    if (colorIndex >= 8) {
+      colorIndex = 0;
+    }
+  }
+  lastState = b2;
+
+  return colors[colorIndex];
 }
